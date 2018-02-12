@@ -72,7 +72,26 @@ class PhotosViewController: UIViewController,UITableViewDataSource, UITableViewD
         }
         return cell
     }
-
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let pdvc = segue.destination as! PhotoDetailsViewController
+        let cell = sender as! UITableViewCell
+        let indexPath = PhotoTableView.indexPath(for: cell)
+        
+        let post = posts[indexPath!.row]
+        
+        if let photos = post["photos"] as? [[String: Any]] {
+            let photo = photos[0]
+            let originalSize = photo["original_size"] as! [String: Any]
+            let urlS = originalSize["url"] as! String
+            let url = URL(string: urlS)
+            
+            pdvc.photoURL = url
+        }
+        
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
